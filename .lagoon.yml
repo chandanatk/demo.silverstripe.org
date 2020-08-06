@@ -1,0 +1,24 @@
+docker-compose-yaml: docker-compose.yml
+
+project: ss-example
+
+environment_variables:
+  git_sha: 'true'
+
+tasks:
+#   pre-rollout:
+#     - run:
+#         name: drush sql-dump
+#         command: mkdir -p /app/web/sites/default/files/private/ && drush sql-dump --ordered-dump --gzip --result-file=/app/web/sites/default/files/private/pre-deploy-dump.sql.gz || true
+#         service: cli
+
+  post-rollout:
+    - run:
+        name: Build database
+        command: ./vendor/bin/sake dev/build
+        service: cli
+        shell: bash
+    - run:
+        name: Show dev tasks
+        command: ./vendor/bin/sake dev/
+        service: cli
